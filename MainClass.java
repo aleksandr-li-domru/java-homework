@@ -1,32 +1,24 @@
 package com.geekbrains.traning.tasks;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import java.sql.SQLException;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class MainClass {
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        SessionFactory factory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .buildSessionFactory();
-        try {
-            TaskRepositoryHibernate repository = new TaskRepositoryHibernate(factory);
-            TaskService taskService = new TaskService(repository);
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TasksConfig.class);
+        TaskService taskService = context.getBean("taskService", TaskService.class);
 
-            for (int i = 1; i <= 10; i++) {
-                Task task = new Task(
-                        null,
-                        "Task " + i,
-                        taskService.getUserByName("admin"),
-                        taskService.getUserByName("user"),
-                        "description " + i,
-                        taskService.getStatusByName("new")
-                );
-                taskService.addTask(task);
-            }
-            taskService.printTasks();
-        } finally {
-            factory.close();
+        for (int i = 1; i <= 10; i++) {
+            Task task = new Task(
+                    null,
+                    "Task " + i,
+                    taskService.getUserByName("admin"),
+                    taskService.getUserByName("user"),
+                    "description " + i,
+                    taskService.getStatusByName("new")
+            );
+            taskService.addTask(task);
         }
+        taskService.printTasks();
+        context.close();
     }
 }

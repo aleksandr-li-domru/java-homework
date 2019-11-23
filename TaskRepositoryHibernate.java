@@ -1,15 +1,25 @@
 package com.geekbrains.traning.tasks;
 
 import org.hibernate.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 public class TaskRepositoryHibernate implements TaskRepository {
     private SessionFactory factory;
     private Session session;
 
-    public TaskRepositoryHibernate(SessionFactory factory) {
+    @Autowired
+    @Qualifier(value = "sessionFactory")
+    public void setFactory(SessionFactory factory) {
         this.factory = factory;
-        this.session = null;
+    }
+
+    public TaskRepositoryHibernate() {
+
     }
 
     @Override

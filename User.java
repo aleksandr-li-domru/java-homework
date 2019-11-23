@@ -1,7 +1,7 @@
 package com.geekbrains.traning.tasks;
 
 import javax.persistence.*;
-import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {

@@ -1,11 +1,23 @@
 package com.geekbrains.traning.tasks;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class TaskService {
     private TaskRepository repository;
 
-    public TaskService(TaskRepository repository) {
+    @Autowired
+    @Qualifier(value = "taskRepositoryHibernate")
+    // Почему-то не сработало с указанием бина как интерфейса taskRepository, хотя других классов реализующих интерфейс сейчас нет
+    public void setRepository(TaskRepository repository) {
+        this.repository = repository;
+    }
+
+    public TaskService() {
         this.repository = repository;
     }
 
