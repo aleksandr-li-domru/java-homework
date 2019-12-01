@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Spring MVC GeekApp</title>
+</head>
+<body>
+<h1>Добавление новой задачи</h1>
+<form th:action="@{/add_task}" th:object="${task}" method="POST">
+    Заголовок: <input th:field="*{title}"/>
+    <br>
+    Описание: <input th:field="*{description}"/>
+    <br>
+    Владелец:
+    <select th:field="*{owner}">
+        <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.name}"/>
+    </select>
+    <br>
+    Исполнитель:
+    <select th:field="*{executer}">
+        <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.name}"/>
+    </select>
+    <br>
+    Статус:
+    <select th:field="*{status}">
+        <option th:each="s : ${statuses}" th:value="${s.id}" th:text="${s.name}"/>
+    </select>
+    <br>
+    <br>
+
+    <input type="submit" value="Создать" />
+</form>
+<a th:href="@{/}">на Главную страницу</a>
+</body>
+</html>
