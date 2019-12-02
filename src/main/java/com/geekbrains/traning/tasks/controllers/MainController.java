@@ -46,8 +46,19 @@ public class MainController {
         return "add";
     }
 
+    // Не работает
     @RequestMapping(value = "/add_task", method = RequestMethod.POST)
     public String addNewTask(@ModelAttribute("task") Task task) {
+        taskService.addTask(task);
+        return "redirect:/tasks";
+    }
+
+    @RequestMapping(value = "/add_task_simple", method = RequestMethod.POST)
+    public String addNewTaskSimple(String title, String description, Long owner, Long executer, Long status) {
+        User own = taskService.getUserById(owner);
+        User exec = taskService.getUserById(executer);
+        Status stat = taskService.getStatusById(status);
+        Task task = new Task(null, title, own, exec, description, stat);
         taskService.addTask(task);
         return "redirect:/tasks";
     }

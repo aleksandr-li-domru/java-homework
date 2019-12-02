@@ -23,10 +23,10 @@ public class DictRepositoryHibernate implements DictRepository {
     }
 
     @Override
-    public List<Status> getStatuses() {
+    public Status getStatusById(Long id) {
         session = factory.getCurrentSession();
-        List<Status> res = session.createQuery("select s from Status s", Status.class).getResultList();
-        return res;
+        Status status = session.get(Status.class, id);
+        return status;
     }
 
     @Override
@@ -36,5 +36,12 @@ public class DictRepositoryHibernate implements DictRepository {
                 .setParameter("name", name)
                 .getSingleResult();
         return status;
+    }
+
+    @Override
+    public List<Status> getStatuses() {
+        session = factory.getCurrentSession();
+        List<Status> res = session.createQuery("select s from Status s", Status.class).getResultList();
+        return res;
     }
 }

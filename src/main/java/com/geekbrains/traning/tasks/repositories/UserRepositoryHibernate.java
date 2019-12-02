@@ -23,6 +23,13 @@ public class UserRepositoryHibernate implements UserRpository {
     }
 
     @Override
+    public User getUserById(Long id) {
+        session = factory.getCurrentSession();
+        User user = session.get(User.class, id);
+        return user;
+    }
+
+    @Override
     public User getUserByName(String name) {
         session = factory.getCurrentSession();
         User user = session.createQuery("select u from User u where u.name = :name", User.class)

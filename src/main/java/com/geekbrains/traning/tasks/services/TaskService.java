@@ -56,12 +56,20 @@ public class TaskService {
         }
     }
 
+    public User getUserById(Long id) {
+        return userRep.getUserById(id);
+    }
+
     public User getUserByName(String name) {
         return userRep.getUserByName(name);
     }
 
     public List<User> getUsers() {
         return userRep.getUsers();
+    }
+
+    public Status getStatusById(Long id) {
+        return dictRep.getStatusById(id);
     }
 
     public Status getStatusByName(String name) {
@@ -71,4 +79,6 @@ public class TaskService {
     public List<Status> getStatuses() {
         return dictRep.getStatuses();
     }
+
+
 }

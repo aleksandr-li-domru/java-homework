@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6e8abdb4-8f86-430b-af11-919da66c1ecc" name="Default Changelist" comment="" />
+    <list default="true" id="6e8abdb4-8f86-430b-af11-919da66c1ecc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/controllers/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/controllers/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/DictRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/DictRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/DictRepositoryHibernate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/DictRepositoryHibernate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/UserRepositoryHibernate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/UserRepositoryHibernate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/UserRpository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/repositories/UserRpository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/services/TaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/geekbrains/traning/tasks/services/TaskService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/taskmanager.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/WEB-INF/templates/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/WEB-INF/templates/add.html" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +27,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -92,5 +106,16 @@
       <updated>1574493835526</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

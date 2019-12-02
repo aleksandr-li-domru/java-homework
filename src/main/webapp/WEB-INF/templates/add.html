@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Добавление новой задачи</h1>
-<form th:action="@{/add_task}" th:object="${task}" method="POST">
+<form th:action="@{/add_task_simple}" th:object="${task}" method="POST">
     Заголовок: <input th:field="*{title}"/>
     <br>
     Описание: <input th:field="*{description}"/>
