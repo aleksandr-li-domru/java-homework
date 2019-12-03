@@ -1,6 +1,7 @@
 package com.geekbrains.traning.tasks.repositories;
 
 import com.geekbrains.traning.tasks.entities.Status;
+import lombok.NoArgsConstructor;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,28 +11,25 @@ import java.util.List;
 
 @Repository
 @Transactional
+@NoArgsConstructor
 public class DictRepositoryHibernate implements DictRepository {
-    private SessionFactory factory;
-    private Session session;
-
-    public DictRepositoryHibernate() {
-    }
+    private MySessionFactory mySessionFactory;
 
     @Autowired
-    public void setFactory(SessionFactory factory) {
-        this.factory = factory;
+    public void setMySessionFactory(MySessionFactory mySessionFactory) {
+        this.mySessionFactory = mySessionFactory;
     }
 
     @Override
     public Status getStatusById(Long id) {
-        session = factory.getCurrentSession();
+        Session session = mySessionFactory.getSession();
         Status status = session.get(Status.class, id);
         return status;
     }
 
     @Override
     public Status getStatusByName(String name) {
-        session = factory.getCurrentSession();
+        Session session = mySessionFactory.getSession();
         Status status = session.createQuery("select s from Status s where s.name = :name", Status.class)
                 .setParameter("name", name)
                 .getSingleResult();
@@ -40,7 +38,7 @@ public class DictRepositoryHibernate implements DictRepository {
 
     @Override
     public List<Status> getStatuses() {
-        session = factory.getCurrentSession();
+        Session session = mySessionFactory.getSession();
         List<Status> res = session.createQuery("select s from Status s", Status.class).getResultList();
         return res;
     }

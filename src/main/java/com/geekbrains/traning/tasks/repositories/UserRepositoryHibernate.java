@@ -1,6 +1,7 @@
 package com.geekbrains.traning.tasks.repositories;
 
 import com.geekbrains.traning.tasks.entities.User;
+import lombok.NoArgsConstructor;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,28 +11,25 @@ import java.util.List;
 
 @Repository
 @Transactional
+@NoArgsConstructor
 public class UserRepositoryHibernate implements UserRpository {
-    private SessionFactory factory;
-    private Session session;
-
-    public UserRepositoryHibernate() {
-    }
+    private MySessionFactory mySessionFactory;
 
     @Autowired
-    public void setFactory(SessionFactory factory) {
-        this.factory = factory;
+    public void setMySessionFactory(MySessionFactory mySessionFactory) {
+        this.mySessionFactory = mySessionFactory;
     }
 
     @Override
     public User getUserById(Long id) {
-        session = factory.getCurrentSession();
+        Session session = mySessionFactory.getSession();
         User user = session.get(User.class, id);
         return user;
     }
 
     @Override
     public User getUserByName(String name) {
-        session = factory.getCurrentSession();
+        Session session = mySessionFactory.getSession();
         User user = session.createQuery("select u from User u where u.name = :name", User.class)
                 .setParameter("name", name)
                 .getSingleResult();
@@ -40,7 +38,7 @@ public class UserRepositoryHibernate implements UserRpository {
 
     @Override
     public List<User> getUsers() {
-        session = factory.getCurrentSession();
+        Session session = mySessionFactory.getSession();
         List<User> res = session.createQuery("select u from User u", User.class).getResultList();
         return res;
     }

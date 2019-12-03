@@ -1,9 +1,14 @@
 package com.geekbrains.traning.tasks.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
+@Data
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,14 +23,6 @@ public class User {
 
     @Override
     public String toString() {
-        return name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
         return name;
     }
 }

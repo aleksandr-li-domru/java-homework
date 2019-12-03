@@ -7,6 +7,7 @@ import java.util.List;
 public interface TaskRepository {
     void addTask(Task task);
     void updateTask(Task task);
+    Task getTask(Long id);
     void delTask(Long id);
     List<Task> getAllTasks();
 }

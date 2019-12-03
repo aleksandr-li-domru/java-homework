@@ -18,6 +18,7 @@
         <td width="20%">Автор</td>
         <td width="20%">Исполнитель</td>
         <td width="15%">Статус</td>
+        <td width="10%">&nbsp;</td>
     </tr>
     </thead>
 
@@ -28,6 +29,7 @@
             <td th:text="${t.owner}"></td>
             <td th:text="${t.executer}"></td>
             <td th:text="${t.status}"></td>
+            <td><a th:href="@{/view/} + ${t.id}">Посмотреть</a></td>
         </tr>
     </tbody>
 </table>

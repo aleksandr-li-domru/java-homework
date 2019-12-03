@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Spring MVC GeekApp</title>
+</head>
+<body>
+<h1>Задача #<span th:text="${task.id}" /></h1>
+<table>
+    <tr><th>Заголовок</th><td><span th:text="${task.title}"/></td></tr>
+    <tr><th>Описание</th><td><span th:text="${task.description}"/></td></tr>
+    <tr><th>Владелец</th><td><span th:text="${task.owner}"/></td></tr>
+    <tr><th>Исполнитель</th><td><span th:text="${task.executer}"/></td></tr>
+    <tr><th>Статус</th><td><span th:text="${task.status}"/></td></tr>
+</table>
+<a th:href="@{/del/} + ${task.id}">[Удалить]</a>
+<br>
+<a th:href="@{/tasks}">к списку задач</a>
+</body>
+</html>

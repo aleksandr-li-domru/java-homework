@@ -1,9 +1,14 @@
 package com.geekbrains.traning.tasks.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "tasks")
+@Data
+@NoArgsConstructor
 public class Task {
 
     @Id
@@ -29,56 +34,12 @@ public class Task {
     @JoinColumn(name = "id_status")
     private Status status;
 
-    public Task() {
-
-    }
-
     public Task(Long id, String title, User owner, User executer, String descriprion, Status status) {
         this.id = id;
         this.title = title;
         this.owner = owner;
         this.executer = executer;
         this.description = descriprion;
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public User getExecuter() {
-        return executer;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setExecuter(User executer) {
-        this.executer = executer;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStatus(Status status) {
         this.status = status;
     }
 
