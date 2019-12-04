@@ -2,10 +2,10 @@ package com.geekbrains.traning.tasks.repositories;
 
 import com.geekbrains.traning.tasks.entities.Status;
 import lombok.NoArgsConstructor;
-import org.hibernate.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -13,30 +13,20 @@ import java.util.List;
 @Transactional
 @NoArgsConstructor
 public class DictRepository {
-    private MySessionFactory mySessionFactory;
-
-    @Autowired
-    public void setMySessionFactory(MySessionFactory mySessionFactory) {
-        this.mySessionFactory = mySessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public Status getStatusById(Long id) {
-        Session session = mySessionFactory.getSession();
-        Status status = session.get(Status.class, id);
-        return status;
+        return entityManager.find(Status.class, id);
     }
 
     public Status getStatusByName(String name) {
-        Session session = mySessionFactory.getSession();
-        Status status = session.createQuery("select s from Status s where s.name = :name", Status.class)
+        return entityManager.createQuery("select s from Status s where s.name = :name", Status.class)
                 .setParameter("name", name)
                 .getSingleResult();
-        return status;
     }
 
     public List<Status> getStatuses() {
-        Session session = mySessionFactory.getSession();
-        List<Status> res = session.createQuery("select s from Status s", Status.class).getResultList();
-        return res;
+        return entityManager.createQuery("select s from Status s", Status.class).getResultList();
     }
 }

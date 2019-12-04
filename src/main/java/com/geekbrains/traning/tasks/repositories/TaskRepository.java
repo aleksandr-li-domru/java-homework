@@ -1,13 +1,12 @@
 package com.geekbrains.traning.tasks.repositories;
 
-
 import com.geekbrains.traning.tasks.entities.Status;
 import com.geekbrains.traning.tasks.entities.Task;
 import lombok.NoArgsConstructor;
-import org.hibernate.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -15,53 +14,38 @@ import java.util.List;
 @Transactional
 @NoArgsConstructor
 public class TaskRepository {
-    private MySessionFactory mySessionFactory;
-
-    @Autowired
-    public void setMySessionFactory(MySessionFactory mySessionFactory) {
-        this.mySessionFactory = mySessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void addTask(Task task) {
-        Session session = mySessionFactory.getSession();
-        session.save(task);
+        entityManager.persist(task);
     }
 
     public void updateTask(Task task) {
-        Session session = mySessionFactory.getSession();
-        session.update(task);
+        entityManager.persist(task);
     }
 
-    public List<Task> getAllTasks() {
-        Session session = mySessionFactory.getSession();
-        List<Task> res = session.createQuery("select t from Task t", Task.class).getResultList();
-        return res;
-    }
-
-    public List<Task> getTasksByTitle(String title) {
-        Session session = mySessionFactory.getSession();
-        List<Task> res = session.createQuery("select t from Task t where t.title like :title", Task.class)
-                .setParameter("title", title)
-                .getResultList();
-        return res;
-    }
-
-    public List<Task> getTasksByStatus(Status status) {
-        Session session = mySessionFactory.getSession();
-        List<Task> res = session.createQuery("select t from Task t where t.status = :status", Task.class)
-                .setParameter("status", status)
-                .getResultList();
-        return res;
+    public List<Task> getAllTasks(String title, Status status) {
+        List<Task> tasks = null;
+        if (title != null && title.length() != 0) {
+            tasks = entityManager.createQuery("select t from Task t where t.title like :title", Task.class)
+                    .setParameter("title", "%" + title + "%")
+                    .getResultList();
+        } else if (status != null) {
+            tasks = entityManager.createQuery("select t from Task t where t.status = :status", Task.class)
+                    .setParameter("status", status)
+                    .getResultList();
+        } else {
+            tasks = entityManager.createQuery("select t from Task t", Task.class).getResultList();
+        }
+        return tasks;
     }
 
     public void delTask(Long id) {
-        Session session = mySessionFactory.getSession();
-        session.delete(session.get(Task.class, id));
+        entityManager.remove(getTask(id));
     }
 
     public Task getTask(Long id) {
-        Session session = mySessionFactory.getSession();
-        Task task = session.get(Task.class, id);
-        return task;
+        return entityManager.find(Task.class, id);
     }
 }

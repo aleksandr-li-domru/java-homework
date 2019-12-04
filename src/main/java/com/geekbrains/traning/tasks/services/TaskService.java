@@ -30,13 +30,7 @@ public class TaskService {
     }
 
     public List<Task> getAllTasks (String title, Status status) {
-        if (title != null && title.length() != 0) {
-            return taskRep.getTasksByTitle(title);
-        } else if (status != null) {
-            return taskRep.getTasksByStatus(status);
-        } else {
-            return taskRep.getAllTasks();
-        }
+        return taskRep.getAllTasks(title, status);
     }
 
     public Task getTask(Long id) {
@@ -44,7 +38,7 @@ public class TaskService {
     }
 
     public void printTasks() {
-        List<Task> tasks = taskRep.getAllTasks();
+        List<Task> tasks = taskRep.getAllTasks(null, null);
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(tasks.get(i).toString());
         }
