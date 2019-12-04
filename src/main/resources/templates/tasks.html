@@ -14,10 +14,26 @@
     <thead>
     <tr>
         <td width="5%">ID</td>
-        <td width="20%">Заголовок</td>
+        <td width="20%">
+            Заголовок
+            <form th:action="@{/tasks}">
+                <input type="text" name="title"/>
+                <input type="submit" value=">"/>
+            </form>
+        </td>
         <td width="20%">Автор</td>
         <td width="20%">Исполнитель</td>
-        <td width="15%">Статус</td>
+        <td width="15%">
+            Статус
+            <form th:action="@{/tasks}">
+                <select name="status_id">
+                    <option value="">-</option>
+                    <option th:each="s : ${statuses}" th:value="${s.id}" th:text="${s.name}"/>
+                </select>
+                <input type="submit" value=">"/>
+            </form>
+        </td>
+        <td width="10%">&nbsp;</td>
     </tr>
     </thead>
 
@@ -28,6 +44,7 @@
             <td th:text="${t.owner}"></td>
             <td th:text="${t.executer}"></td>
             <td th:text="${t.status}"></td>
+            <td><a th:href="@{/view/} + ${t.id}">Посмотреть</a></td>
         </tr>
     </tbody>
 </table>

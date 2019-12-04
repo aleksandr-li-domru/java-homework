@@ -1,6 +1,6 @@
 package com.geekbrains.traning.tasks.repositories;
 
-import com.geekbrains.traning.tasks.entities.Status;
+import com.geekbrains.traning.tasks.entities.User;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,21 +12,21 @@ import java.util.List;
 @Repository
 @Transactional
 @NoArgsConstructor
-public class DictRepository {
+public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Status getStatusById(Long id) {
-        return entityManager.find(Status.class, id);
+    public User getUserById(Long id) {
+        return entityManager.find(User.class, id);
     }
 
-    public Status getStatusByName(String name) {
-        return entityManager.createQuery("select s from Status s where s.name = :name", Status.class)
+    public User getUserByName(String name) {
+        return entityManager.createQuery("select u from User u where u.name = :name", User.class)
                 .setParameter("name", name)
                 .getSingleResult();
     }
 
-    public List<Status> getStatuses() {
-        return entityManager.createQuery("select s from Status s", Status.class).getResultList();
+    public List<User> getUsers() {
+        return entityManager.createQuery("select u from User u", User.class).getResultList();
     }
 }
