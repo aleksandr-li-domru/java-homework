@@ -18,6 +18,9 @@ public class MySessionFactory {
     }
 
     public Session getSession() {
+        if (!session.isOpen()) {
+            session = this.entityManagerFactory.unwrap(SessionFactory.class).openSession();
+        }
         return session;
     }
 }

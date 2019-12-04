@@ -41,9 +41,16 @@ public class MainController {
     }
 
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
-    public String showAllTasks(Model model) {
-        List<Task> tasks = taskService.getAllTasks();
+    public String showAllTasks(@RequestParam(value = "title", required = false) String title,
+                               @RequestParam(value = "status_id", required = false) Long statusId,
+                               Model model) {
+        Status status = null;
+        if (statusId != null) {
+            status = dictService.getStatusById(statusId);
+        }
+        List<Task> tasks = taskService.getAllTasks(title, status);
         model.addAttribute("tasks", tasks);
+        model.addAttribute("statuses", dictService.getStatuses());
         return "tasks";
     }
 

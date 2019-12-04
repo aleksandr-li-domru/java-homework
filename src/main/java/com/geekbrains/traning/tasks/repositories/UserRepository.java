@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 @Transactional
 @NoArgsConstructor
-public class UserRepositoryHibernate implements UserRpository {
+public class UserRepository {
     private MySessionFactory mySessionFactory;
 
     @Autowired
@@ -20,14 +20,12 @@ public class UserRepositoryHibernate implements UserRpository {
         this.mySessionFactory = mySessionFactory;
     }
 
-    @Override
     public User getUserById(Long id) {
         Session session = mySessionFactory.getSession();
         User user = session.get(User.class, id);
         return user;
     }
 
-    @Override
     public User getUserByName(String name) {
         Session session = mySessionFactory.getSession();
         User user = session.createQuery("select u from User u where u.name = :name", User.class)
@@ -36,7 +34,6 @@ public class UserRepositoryHibernate implements UserRpository {
         return user;
     }
 
-    @Override
     public List<User> getUsers() {
         Session session = mySessionFactory.getSession();
         List<User> res = session.createQuery("select u from User u", User.class).getResultList();

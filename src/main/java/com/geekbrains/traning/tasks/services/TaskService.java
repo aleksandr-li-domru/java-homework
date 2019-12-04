@@ -1,11 +1,8 @@
 package com.geekbrains.traning.tasks.services;
 
-import com.geekbrains.traning.tasks.entities.Task;
-import com.geekbrains.traning.tasks.entities.User;
 import com.geekbrains.traning.tasks.entities.Status;
-import com.geekbrains.traning.tasks.repositories.DictRepository;
+import com.geekbrains.traning.tasks.entities.Task;
 import com.geekbrains.traning.tasks.repositories.TaskRepository;
-import com.geekbrains.traning.tasks.repositories.UserRpository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +29,14 @@ public class TaskService {
         taskRep.delTask(id);
     }
 
-    public List<Task> getAllTasks () {
-        return taskRep.getAllTasks();
+    public List<Task> getAllTasks (String title, Status status) {
+        if (title != null && title.length() != 0) {
+            return taskRep.getTasksByTitle(title);
+        } else if (status != null) {
+            return taskRep.getTasksByStatus(status);
+        } else {
+            return taskRep.getAllTasks();
+        }
     }
 
     public Task getTask(Long id) {
