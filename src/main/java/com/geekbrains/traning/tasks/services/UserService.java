@@ -17,14 +17,10 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRep.getUserById(id);
-    }
-
-    public User getUserByName(String name) {
-        return userRep.getUserByName(name);
+        return userRep.findById(id).get();
     }
 
     public List<User> getUsers() {
-        return userRep.getUsers();
+        return userRep.findAll();
     }
 }
