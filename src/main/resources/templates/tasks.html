@@ -11,34 +11,41 @@
 <h1>Список задач:</h1>
 <a th:href="@{/add}">Добавить задачу</a>
 <table border="1" cellpadding="1" cellspacing="0px" width="80%">
+    <form th:action="@{/tasks}">
     <thead>
     <tr>
         <td width="5%">ID</td>
         <td width="20%">
             Заголовок
-            <form th:action="@{/tasks}">
-                <input type="text" name="title"/>
-                <input type="submit" value=">"/>
-            </form>
+            <input type="text" name="title"/>
         </td>
-        <td width="20%">Автор</td>
-        <td width="20%">Исполнитель</td>
+        <td width="20%">
+            Автор
+            <select name="owner_id">
+                <option value="">-</option>
+                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.name}"/>
+            </select>
+        </td>
+        <td width="20%">
+            Исполнитель
+            <select name="exec_id">
+                <option value="">-</option>
+                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.name}"/>
+            </select>
+        </td>
         <td width="15%">
             Статус
-            <form th:action="@{/tasks}">
-                <select name="status_id">
-                    <option value="">-</option>
-                    <option th:each="s : ${statuses}" th:value="${s.id}" th:text="${s.name}"/>
-                </select>
-                <input type="submit" value=">"/>
-            </form>
+            <select name="status_id">
+                <option value="">-</option>
+                <option th:each="s : ${statuses}" th:value="${s.id}" th:text="${s.name}"/>
+            </select>
         </td>
-        <td width="10%">&nbsp;</td>
+        <td width="10%"><input type="submit" value="Фильтровать"/></td>
     </tr>
     </thead>
-
+    </form>
     <tbody>
-        <tr th:each="t : ${tasks}">
+        <tr th:each="t : ${tasks.getContent()}">
             <td th:text="${t.id}"></td>
             <td th:text="${t.title}"></td>
             <td th:text="${t.owner}"></td>

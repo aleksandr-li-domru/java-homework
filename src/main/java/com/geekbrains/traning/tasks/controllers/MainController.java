@@ -3,10 +3,11 @@ package com.geekbrains.traning.tasks.controllers;
 import com.geekbrains.traning.tasks.entities.Status;
 import com.geekbrains.traning.tasks.entities.Task;
 import com.geekbrains.traning.tasks.entities.User;
-import com.geekbrains.traning.tasks.services.DictService;
+import com.geekbrains.traning.tasks.services.StatusService;
 import com.geekbrains.traning.tasks.services.TaskService;
 import com.geekbrains.traning.tasks.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import java.util.List;
 public class MainController {
 
     private TaskService taskService;
-    private DictService dictService;
+    private StatusService statusService;
     private UserService userService;
 
     @Autowired
@@ -26,8 +27,8 @@ public class MainController {
     }
 
     @Autowired
-    public void setDictService(DictService dictService) {
-        this.dictService = dictService;
+    public void setStatusService(StatusService statusService) {
+        this.statusService = statusService;
     }
 
     @Autowired
@@ -41,16 +42,28 @@ public class MainController {
     }
 
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
-    public String showAllTasks(@RequestParam(value = "title", required = false) String title,
+    public String showAllTasks(@RequestParam(defaultValue = "1") Long pageNumber,
+                               @RequestParam(value = "title", required = false) String title,
+                               @RequestParam(value = "owner_id", required = false) Long ownerId,
+                               @RequestParam(value = "exec_id", required = false) Long executerId,
                                @RequestParam(value = "status_id", required = false) Long statusId,
                                Model model) {
+        User owner = null;
+        User executer = null;
         Status status = null;
-        if (statusId != null) {
-            status = dictService.getStatusById(statusId);
+        if (ownerId != null) {
+            owner = userService.getUserById(ownerId);
         }
-        List<Task> tasks = taskService.getAllTasks(title, status);
+        if (executerId != null) {
+            executer = userService.getUserById(executerId);
+        }
+        if (statusId != null) {
+            status = statusService.getStatusById(statusId);
+        }
+        Page<Task> tasks = taskService.getAllTasks(pageNumber, title, owner, executer, status);
         model.addAttribute("tasks", tasks);
-        model.addAttribute("statuses", dictService.getStatuses());
+        model.addAttribute("statuses", statusService.getStatuses());
+        model.addAttribute("users", userService.getUsers());
         return "tasks";
     }
 
@@ -60,7 +73,7 @@ public class MainController {
         model.addAttribute("task", task);
 
         List<User> users = userService.getUsers();
-        List<Status> statuses = dictService.getStatuses();
+        List<Status> statuses = statusService.getStatuses();
         model.addAttribute("users", users);
         model.addAttribute("statuses", statuses);
 
@@ -71,7 +84,7 @@ public class MainController {
     public String addNewTaskSimple(String title, String description, Long owner, Long executer, Long status) {
         User own = userService.getUserById(owner);
         User exec = userService.getUserById(executer);
-        Status stat = dictService.getStatusById(status);
+        Status stat = statusService.getStatusById(status);
         Task task = new Task(null, title, own, exec, description, stat);
         taskService.addTask(task);
         return "redirect:/tasks";
