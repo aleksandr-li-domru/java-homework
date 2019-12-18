@@ -27,4 +27,12 @@ public interface ItemsClient extends RestService {
     @GET
     @Path("users")
     void getAllUsers(MethodCallback<List<UserDto>> items);
+
+    @GET
+    @Path("get/{id}")
+    void getItem(@PathParam("id") String id, MethodCallback<TaskDto> result);
+
+    @POST
+    @Path("add")
+    void add(TaskDto dto, MethodCallback<Void> result);
 }

@@ -29,6 +29,12 @@ public class ItemsTableWidget extends Composite {
 
     private static ItemsTableBinder uiBinder = GWT.create(ItemsTableBinder.class);
 
+    private AddItemFormWidget addItemFormWidget;
+
+    public void setAddItemFormWidget(AddItemFormWidget addItemFormWidget) {
+        this.addItemFormWidget = addItemFormWidget;
+    }
+
     public ItemsTableWidget() {
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -78,7 +84,7 @@ public class ItemsTableWidget extends Composite {
                 new ActionCell<TaskDto>("Изменить", new ActionCell.Delegate<TaskDto>() {
                     @Override
                     public void execute(TaskDto item) {
-                        client.removeItem(item.getId().toString(), new MethodCallback<Void>() {
+                        client.getItem(item.getId().toString(), new MethodCallback<TaskDto>() {
                             @Override
                             public void onFailure(Method method, Throwable throwable) {
                                 GWT.log(throwable.toString());
@@ -86,8 +92,8 @@ public class ItemsTableWidget extends Composite {
                             }
 
                             @Override
-                            public void onSuccess(Method method, Void result) {
-                                refresh(null, null, null, null);
+                            public void onSuccess(Method method, TaskDto result) {
+                                addItemFormWidget.setForm(result);
                             }
                         });
                     }

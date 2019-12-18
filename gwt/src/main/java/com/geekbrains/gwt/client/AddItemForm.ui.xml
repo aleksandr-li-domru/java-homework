@@ -2,23 +2,32 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
 
     <g:DecoratorPanel>
-        <g:FormPanel ui:field="form" method="POST">
-            <g:VerticalPanel spacing="10">
-                <g:HorizontalPanel>
-                    <g:Label text="ID:" width="100px"/>
-                    <g:TextBox name="id" ui:field="idText"/>
-                </g:HorizontalPanel>
-                <g:HorizontalPanel>
-                    <g:Label text="Title:" width="100px"/>
-                    <g:TextBox name="title" ui:field="titleText"/>
-                </g:HorizontalPanel>
-                <g:ListBox name="category">
-                    <g:item value="1">FOOD</g:item>
-                    <g:item value="2">DEVICE</g:item>
-                    <g:item value="3">ANOTHER</g:item>
-                </g:ListBox>
-                <g:Button ui:field="btnSubmit">Создать</g:Button>
-            </g:VerticalPanel>
-        </g:FormPanel>
+        <g:VerticalPanel spacing="10">
+            <g:Hidden name="id" ui:field="idText"/>
+            <g:HorizontalPanel>
+                <g:Label text="Title:" width="100px"/>
+                <g:TextBox name="title" ui:field="titleText" width="200px"/>
+            </g:HorizontalPanel>
+            <g:HorizontalPanel>
+                <g:Label text="Description:" width="100px"/>
+                <g:TextBox name="descr" ui:field="descrText" width="200px"/>
+            </g:HorizontalPanel>
+            <g:HorizontalPanel>
+                <g:Label text="Статус:" width="100px"/>
+                <g:ListBox  name="status" ui:field="statusSel" width="200px"/>
+            </g:HorizontalPanel>
+            <g:HorizontalPanel>
+                <g:Label text="Владелец:" width="100px"/>
+                <g:ListBox  name="owner" ui:field="ownerSel" width="200px"/>
+            </g:HorizontalPanel>
+            <g:HorizontalPanel>
+                <g:Label text="Исполнитель:" width="100px"/>
+                <g:ListBox  name="exec" ui:field="execSel" width="200px"/>
+            </g:HorizontalPanel>
+            <g:HorizontalPanel>
+                <g:Button ui:field="btnSubmit">Отправить</g:Button>
+                <g:Button ui:field="btnClear">Очистить</g:Button>
+            </g:HorizontalPanel>
+        </g:VerticalPanel>
     </g:DecoratorPanel>
 </ui:UiBinder>

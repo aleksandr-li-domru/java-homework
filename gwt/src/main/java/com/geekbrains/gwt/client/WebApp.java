@@ -10,8 +10,10 @@ public class WebApp implements EntryPoint {
         Defaults.setServiceRoot("http://localhost:8189/gwt-rest/api/v1");
         ItemsTableWidget itemsTableWidget = new ItemsTableWidget();
         VerticalPanel verticalPanel = new VerticalPanel();
-        //verticalPanel.add(new AddItemFormWidget(itemsTableWidget));
+        AddItemFormWidget addItemFormWidget = new AddItemFormWidget(itemsTableWidget);
+        verticalPanel.add(addItemFormWidget);
         verticalPanel.add(new FilterTableWidget(itemsTableWidget));
+        itemsTableWidget.setAddItemFormWidget(addItemFormWidget);
         verticalPanel.add(itemsTableWidget);
         RootPanel.get().add(verticalPanel);
     }
