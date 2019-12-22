@@ -57,9 +57,9 @@ public class Task {
         dto.setStatusId(status.getId());
         dto.setStatus(status.getName());
         dto.setOwnerId(owner.getId());
-        dto.setOwner(owner.getName());
+        dto.setOwner(owner.getUsername());
         dto.setExecuterId(executer.getId());
-        dto.setExecuter(executer.getName());
+        dto.setExecuter(executer.getUsername());
         return dto;
     }
 }

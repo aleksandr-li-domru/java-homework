@@ -5,14 +5,13 @@ import com.geekbrains.gwt.common.TaskDto;
 import com.geekbrains.gwt.common.UserDto;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.fusesource.restygwt.client.Defaults;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
@@ -51,8 +50,6 @@ public class AddItemFormWidget extends Composite {
         this.client = GWT.create(ItemsClient.class);
         this.initWidget(uiBinder.createAndBindUi(this));
         this.itemsTableWidget = itemsTableWidget;
-        loadStatuses();
-        loadUsers();
     }
 
     @UiHandler("btnSubmit")
@@ -67,8 +64,8 @@ public class AddItemFormWidget extends Composite {
         dto.setOwnerId(Long.parseLong(ownerSel.getSelectedValue()));
         dto.setExecuterId(Long.parseLong(execSel.getSelectedValue()));
         dto.setStatusId(Long.parseLong(statusSel.getSelectedValue()));
-        client.add(dto, new MethodCallback<Void> () {
-
+        String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+        client.add(token, dto, new MethodCallback<Void> () {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log(throwable.toString());
@@ -99,7 +96,8 @@ public class AddItemFormWidget extends Composite {
     }
 
     public void loadStatuses() {
-        client.getAllStatuses(new MethodCallback<List<StatusDto>>() {
+        String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+        client.getAllStatuses(token, new MethodCallback<List<StatusDto>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log(throwable.toString());
@@ -118,7 +116,8 @@ public class AddItemFormWidget extends Composite {
     }
 
     public void loadUsers() {
-        client.getAllUsers(new MethodCallback<List<UserDto>>() {
+        String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+        client.getAllUsers(token, new MethodCallback<List<UserDto>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log(throwable.toString());
@@ -131,8 +130,8 @@ public class AddItemFormWidget extends Composite {
                 ownerSel.addItem("", "");
                 execSel.addItem("", "");
                 for (int i = 0; i < users.size(); i++) {
-                    ownerSel.addItem(users.get(i).getName(), users.get(i).getId().toString());
-                    execSel.addItem(users.get(i).getName(), users.get(i).getId().toString());
+                    ownerSel.addItem(users.get(i).getUsername(), users.get(i).getId().toString());
+                    execSel.addItem(users.get(i).getUsername(), users.get(i).getId().toString());
                 }
             }
         });
@@ -157,5 +156,10 @@ public class AddItemFormWidget extends Composite {
         this.setSelectedValue(statusSel, dto.getStatusId().toString());
         this.setSelectedValue(ownerSel, dto.getOwnerId().toString());
         this.setSelectedValue(execSel, dto.getExecuterId().toString());
+    }
+
+    public void refresh() {
+        loadStatuses();
+        loadUsers();
     }
 }

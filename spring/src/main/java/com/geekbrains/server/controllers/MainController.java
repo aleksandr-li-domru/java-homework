@@ -6,13 +6,11 @@ import com.geekbrains.gwt.common.UserDto;
 import com.geekbrains.server.entities.*;
 import com.geekbrains.server.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -80,7 +78,7 @@ public class MainController {
     }
 
     @PostMapping("/tasks/add")
-    public ResponseEntity<String> addTask(TaskDto dto) {
+    public ResponseEntity<String> addTask(@RequestBody TaskDto dto) {
         Task task = new Task(
                 dto.getId(),
                 dto.getTitle(),
