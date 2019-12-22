@@ -1,5 +1,8 @@
 package com.geekbrains.gwt.client;
 
+import com.geekbrains.gwt.common.StatusDto;
+import com.geekbrains.gwt.common.TaskDto;
+import com.geekbrains.gwt.common.UserDto;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -8,21 +11,33 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Defaults;
+import org.fusesource.restygwt.client.Method;
+import org.fusesource.restygwt.client.MethodCallback;
+
+import java.util.List;
 
 public class AddItemFormWidget extends Composite {
-    @UiField
-    FormPanel form;
+    private ItemsClient client;
 
     @UiField
-    TextBox idText;
+    Hidden idText;
 
     @UiField
     TextBox titleText;
+
+    @UiField
+    TextBox descrText;
+
+    @UiField
+    ListBox statusSel;
+
+    @UiField
+    ListBox ownerSel;
+
+    @UiField
+    ListBox execSel;
 
     private ItemsTableWidget itemsTableWidget;
 
@@ -33,30 +48,114 @@ public class AddItemFormWidget extends Composite {
     private static AddItemFormWidget.AddItemFormBinder uiBinder = GWT.create(AddItemFormWidget.AddItemFormBinder.class);
 
     public AddItemFormWidget(ItemsTableWidget itemsTableWidget) {
+        this.client = GWT.create(ItemsClient.class);
         this.initWidget(uiBinder.createAndBindUi(this));
-        this.form.setAction(Defaults.getServiceRoot().concat("items"));
         this.itemsTableWidget = itemsTableWidget;
-    }
-
-    @UiHandler("form")
-    public void onSubmit(FormPanel.SubmitEvent event) {
-        if (idText.getText().length() == 0) {
-            Window.alert("Необходимо заполнить поле ID");
-            event.cancel();
-        }
-        if (titleText.getText().length() < 4) {
-            Window.alert("Название товара должно быть не менее 4 символов");
-            event.cancel();
-        }
-    }
-
-    @UiHandler("form")
-    public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-        itemsTableWidget.refresh(null, null,null, null);
+        loadStatuses();
+        loadUsers();
     }
 
     @UiHandler("btnSubmit")
     public void submitClick(ClickEvent event) {
-        form.submit();
+        TaskDto dto = new TaskDto();
+        String id = idText.getValue();
+        if (id.length() > 0) {
+            dto.setId(Long.parseLong(idText.getValue()));
+        }
+        dto.setTitle(titleText.getValue());
+        dto.setDescription(descrText.getValue());
+        dto.setOwnerId(Long.parseLong(ownerSel.getSelectedValue()));
+        dto.setExecuterId(Long.parseLong(execSel.getSelectedValue()));
+        dto.setStatusId(Long.parseLong(statusSel.getSelectedValue()));
+        client.add(dto, new MethodCallback<Void> () {
+
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                GWT.log(throwable.toString());
+                GWT.log(throwable.getMessage());
+                Window.alert("Ошибка при создании/обновлении таска. Подробности в консоли");
+            }
+
+            @Override
+            public void onSuccess(Method method, Void aVoid) {
+                clearForm();
+                itemsTableWidget.refresh(null, null, null, null);
+            }
+        });
+    }
+
+    public void clearForm() {
+        idText.setValue("");
+        titleText.setValue("");
+        descrText.setValue("");
+        statusSel.setSelectedIndex(0);
+        ownerSel.setSelectedIndex(0);
+        execSel.setSelectedIndex(0);
+    }
+
+    @UiHandler("btnClear")
+    public void clearClick(ClickEvent event) {
+        clearForm();
+    }
+
+    public void loadStatuses() {
+        client.getAllStatuses(new MethodCallback<List<StatusDto>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                GWT.log(throwable.toString());
+                GWT.log(throwable.getMessage());
+                Window.alert("Невозможно получить список статусов: Сервер не отвечает");
+            }
+
+            @Override
+            public void onSuccess(Method method, List<StatusDto> statuses) {
+                statusSel.addItem("", "");
+                for (int i = 0; i < statuses.size(); i++) {
+                    statusSel.addItem(statuses.get(i).getName(), statuses.get(i).getId().toString());
+                }
+            }
+        });
+    }
+
+    public void loadUsers() {
+        client.getAllUsers(new MethodCallback<List<UserDto>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                GWT.log(throwable.toString());
+                GWT.log(throwable.getMessage());
+                Window.alert("Невозможно получить список пользователей: Сервер не отвечает");
+            }
+
+            @Override
+            public void onSuccess(Method method, List<UserDto> users) {
+                ownerSel.addItem("", "");
+                execSel.addItem("", "");
+                for (int i = 0; i < users.size(); i++) {
+                    ownerSel.addItem(users.get(i).getName(), users.get(i).getId().toString());
+                    execSel.addItem(users.get(i).getName(), users.get(i).getId().toString());
+                }
+            }
+        });
+    }
+
+    private void setSelectedValue(ListBox lBox, String str) {
+        String text = str;
+        int indexToFind = -1;
+        for (int i = 0; i < lBox.getItemCount(); i++) {
+            if (lBox.getValue(i).equals(text)) {
+                indexToFind = i;
+                break;
+            }
+        }
+        lBox.setSelectedIndex(indexToFind);
+    }
+
+    public void setForm (TaskDto dto) {
+        idText.setValue(dto.getId().toString());
+        titleText.setValue(dto.getTitle());
+        descrText.setValue(dto.getDescription());
+        this.setSelectedValue(statusSel, dto.getStatusId().toString());
+        this.setSelectedValue(ownerSel, dto.getOwnerId().toString());
+        this.setSelectedValue(execSel, dto.getExecuterId().toString());
     }
 }

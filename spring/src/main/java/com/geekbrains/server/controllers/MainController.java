@@ -72,4 +72,24 @@ public class MainController {
     public List<UserDto> getUsers() {
         return userService.getUsersDto();
     }
+
+
+    @GetMapping("/tasks/get/{id}")
+    public TaskDto getTask(@PathVariable Long id) {
+        return taskService.getTask(id).toDto();
+    }
+
+    @PostMapping("/tasks/add")
+    public ResponseEntity<String> addTask(TaskDto dto) {
+        Task task = new Task(
+                dto.getId(),
+                dto.getTitle(),
+                userService.getUserById(dto.getOwnerId()),
+                userService.getUserById(dto.getExecuterId()),
+                dto.getDescription(),
+                statusService.getStatusById(dto.getStatusId())
+        );
+        taskService.addTask(task);
+        return new ResponseEntity<String>("Successfully added", HttpStatus.OK);
+    }
 }
