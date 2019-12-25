@@ -1,25 +1,8 @@
 package com.geekbrains.gwt.common;
 
-public class UserDto {
-    private Long id;
+public class JwtAuthRequestDto {
     private String username;
     private String password;
-
-    public UserDto() {
-    }
-
-    public UserDto(Long id, String username) {
-        this.id = id;
-        this.username = username;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -34,6 +17,14 @@ public class UserDto {
     }
 
     public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public JwtAuthRequestDto() {
+    }
+
+    public JwtAuthRequestDto(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 }

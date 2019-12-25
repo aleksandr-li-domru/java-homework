@@ -4,6 +4,7 @@ import com.geekbrains.gwt.common.StatusDto;
 import com.geekbrains.gwt.common.UserDto;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -16,7 +17,6 @@ import com.google.gwt.user.client.ui.Widget;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,21 +47,21 @@ public class FilterTableWidget extends Composite {
         this.client = GWT.create(ItemsClient.class);
         this.initWidget(uiBinder.createAndBindUi(this));
         this.itemsTableWidget = itemsTableWidget;
-        loadStatuses();
-        loadUsers();
     }
 
     @UiHandler("btnFilter")
     public void submitClick(ClickEvent event) {
-        itemsTableWidget.refresh(titleFilter.getValue(),
-                Long.parseLong(ownerFilter.getSelectedValue()),
-                Long.parseLong(executerFilter.getSelectedValue()),
-                Long.parseLong(statusFilter.getSelectedValue())
-        );
+        String title = titleFilter.getValue();
+        Long owner = ownerFilter.getSelectedValue() == "" ? null : Long.parseLong(ownerFilter.getSelectedValue());
+        Long executer = executerFilter.getSelectedValue() == "" ? null : Long.parseLong(executerFilter.getSelectedValue());
+        Long status = statusFilter.getSelectedValue() == "" ? null : Long.parseLong(statusFilter.getSelectedValue());
+
+        itemsTableWidget.refresh(title, owner, executer, status);
     }
 
     public void loadStatuses() {
-        client.getAllStatuses(new MethodCallback<List<StatusDto>>() {
+        String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+        client.getAllStatuses(token, new MethodCallback<List<StatusDto>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log(throwable.toString());
@@ -80,7 +80,8 @@ public class FilterTableWidget extends Composite {
     }
 
     public void loadUsers() {
-        client.getAllUsers(new MethodCallback<List<UserDto>>() {
+        String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+        client.getAllUsers(token, new MethodCallback<List<UserDto>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log(throwable.toString());
@@ -93,10 +94,15 @@ public class FilterTableWidget extends Composite {
                 ownerFilter.addItem("", "");
                 executerFilter.addItem("", "");
                 for (int i = 0; i < users.size(); i++) {
-                    ownerFilter.addItem(users.get(i).getName(), users.get(i).getId().toString());
-                    executerFilter.addItem(users.get(i).getName(), users.get(i).getId().toString());
+                    ownerFilter.addItem(users.get(i).getUsername(), users.get(i).getId().toString());
+                    executerFilter.addItem(users.get(i).getUsername(), users.get(i).getId().toString());
                 }
             }
         });
+    }
+
+    public void refresh() {
+        loadStatuses();
+        loadUsers();
     }
 }

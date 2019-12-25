@@ -4,6 +4,7 @@ import com.geekbrains.gwt.common.TaskDto;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -84,7 +85,8 @@ public class ItemsTableWidget extends Composite {
                 new ActionCell<TaskDto>("Изменить", new ActionCell.Delegate<TaskDto>() {
                     @Override
                     public void execute(TaskDto item) {
-                        client.getItem(item.getId().toString(), new MethodCallback<TaskDto>() {
+                        String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+                        client.getItem(token, item.getId().toString(), new MethodCallback<TaskDto>() {
                             @Override
                             public void onFailure(Method method, Throwable throwable) {
                                 GWT.log(throwable.toString());
@@ -110,7 +112,8 @@ public class ItemsTableWidget extends Composite {
                     @Override
                     public void execute(TaskDto item) {
                         if (Window.confirm("Подтвердите удаление")) {
-                            client.removeItem(item.getId().toString(), new MethodCallback<Void>() {
+                            String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+                            client.removeItem(token, item.getId().toString(), new MethodCallback<Void>() {
                                 @Override
                                 public void onFailure(Method method, Throwable throwable) {
                                     GWT.log(throwable.toString());
@@ -144,7 +147,11 @@ public class ItemsTableWidget extends Composite {
     }
 
     public void refresh(String title, Long ownerId, Long executerId, Long statusId) {
-        client.getAllItems(title, ownerId, executerId, statusId, new MethodCallback<List<TaskDto>>() {
+        String token = Storage.getLocalStorageIfSupported().getItem("jwt");
+        if (token == null) {
+            return;
+        }
+        client.getAllItems(token, title, ownerId, executerId, statusId, new MethodCallback<List<TaskDto>>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log(throwable.toString());

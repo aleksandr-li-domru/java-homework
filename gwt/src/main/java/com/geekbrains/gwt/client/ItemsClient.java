@@ -10,7 +10,8 @@ import java.util.List;
 @Path("/tasks")
 public interface ItemsClient extends RestService {
     @GET
-    void getAllItems(@QueryParam("title") String title,
+    void getAllItems(@HeaderParam("Authorization") String token,
+                     @QueryParam("title") String title,
                      @QueryParam("owner_id") Long ownerId,
                      @QueryParam("exec_id") Long executerId,
                      @QueryParam("status_id") Long statusId,
@@ -18,21 +19,21 @@ public interface ItemsClient extends RestService {
 
     @GET
     @Path("remove/{id}")
-    void removeItem(@PathParam("id") String id, MethodCallback<Void> result);
+    void removeItem(@HeaderParam("Authorization") String token, @PathParam("id") String id, MethodCallback<Void> result);
 
     @GET
     @Path("status")
-    void getAllStatuses(MethodCallback<List<StatusDto>> items);
+    void getAllStatuses(@HeaderParam("Authorization") String token, MethodCallback<List<StatusDto>> items);
 
     @GET
     @Path("users")
-    void getAllUsers(MethodCallback<List<UserDto>> items);
+    void getAllUsers(@HeaderParam("Authorization") String token, MethodCallback<List<UserDto>> items);
 
     @GET
     @Path("get/{id}")
-    void getItem(@PathParam("id") String id, MethodCallback<TaskDto> result);
+    void getItem(@HeaderParam("Authorization") String token, @PathParam("id") String id, MethodCallback<TaskDto> result);
 
     @POST
     @Path("add")
-    void add(TaskDto dto, MethodCallback<Void> result);
+    void add(@HeaderParam("Authorization") String token, TaskDto dto, MethodCallback<Void> result);
 }
