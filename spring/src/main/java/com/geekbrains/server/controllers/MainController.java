@@ -4,6 +4,7 @@ import com.geekbrains.gwt.common.StatusDto;
 import com.geekbrains.gwt.common.TaskDto;
 import com.geekbrains.gwt.common.UserDto;
 import com.geekbrains.server.entities.*;
+import com.geekbrains.server.mappers.TaskMapper;
 import com.geekbrains.server.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,19 +75,12 @@ public class MainController {
 
     @GetMapping("/tasks/get/{id}")
     public TaskDto getTask(@PathVariable Long id) {
-        return taskService.getTask(id).toDto();
+        return TaskMapper.MAPPER.fromTask(taskService.getTask(id));
     }
 
     @PostMapping("/tasks/add")
     public ResponseEntity<String> addTask(@RequestBody TaskDto dto) {
-        Task task = new Task(
-                dto.getId(),
-                dto.getTitle(),
-                userService.getUserById(dto.getOwnerId()),
-                userService.getUserById(dto.getExecuterId()),
-                dto.getDescription(),
-                statusService.getStatusById(dto.getStatusId())
-        );
+        Task task = TaskMapper.MAPPER.toTask(dto);
         taskService.addTask(task);
         return new ResponseEntity<String>("Successfully added", HttpStatus.OK);
     }

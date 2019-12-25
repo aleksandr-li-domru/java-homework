@@ -48,18 +48,4 @@ public class Task {
     public String toString() {
         return String.format("Task %d: [%s, %s, %s, %s, %s]", id, title, owner, executer, description, status);
     }
-
-    public TaskDto toDto () {
-        TaskDto dto = new TaskDto();
-        dto.setId(id);
-        dto.setTitle(title);
-        dto.setDescription(description);
-        dto.setStatusId(status.getId());
-        dto.setStatus(status.getName());
-        dto.setOwnerId(owner.getId());
-        dto.setOwner(owner.getUsername());
-        dto.setExecuterId(executer.getId());
-        dto.setExecuter(executer.getUsername());
-        return dto;
-    }
 }

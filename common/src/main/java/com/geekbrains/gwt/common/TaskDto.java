@@ -4,26 +4,21 @@ public class TaskDto {
     private Long id;
     private String title;
     private String description;
-    private Long statusId;
-    private String status;
-    private Long ownerId;
-    private String owner;
-    private Long executerId;
-    private String executer;
+    private UserDto owner;
+    private UserDto executer;
+    private StatusDto status;
+
 
     public TaskDto() {
     }
 
-    public TaskDto(Long id, String title, String description, Long statusId, String status, Long ownerId, String owner, Long executerId, String executer) {
+    public TaskDto(Long id, String title, String description, UserDto owner, UserDto executer, StatusDto status) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.statusId = statusId;
-        this.status = status;
-        this.ownerId = ownerId;
         this.owner = owner;
-        this.executerId = executerId;
         this.executer = executer;
+        this.status = status;
     }
 
     public Long getId() {
@@ -50,51 +45,27 @@ public class TaskDto {
         this.description = description;
     }
 
-    public Long getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(Long statusId) {
-        this.statusId = statusId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public String getOwner() {
+    public UserDto getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(UserDto owner) {
         this.owner = owner;
     }
 
-    public Long getExecuterId() {
-        return executerId;
-    }
-
-    public void setExecuterId(Long executerId) {
-        this.executerId = executerId;
-    }
-
-    public String getExecuter() {
+    public UserDto getExecuter() {
         return executer;
     }
 
-    public void setExecuter(String executer) {
+    public void setExecuter(UserDto executer) {
         this.executer = executer;
+    }
+
+    public StatusDto getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusDto status) {
+        this.status = status;
     }
 }

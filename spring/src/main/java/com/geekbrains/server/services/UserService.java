@@ -2,6 +2,7 @@ package com.geekbrains.server.services;
 
 import com.geekbrains.gwt.common.UserDto;
 import com.geekbrains.server.entities.User;
+import com.geekbrains.server.mappers.UserMapper;
 import com.geekbrains.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,6 @@ public class UserService {
     }
 
     public List<UserDto> getUsersDto () {
-        List<User> users = getUsers();
-        List<UserDto> res = new ArrayList<UserDto>();
-        for (int i = 0; i < users.size(); i++) {
-            res.add(users.get(i).getDto());
-        }
-        return res;
+        return UserMapper.MAPPER.fromUserList(getUsers());
     }
 }
