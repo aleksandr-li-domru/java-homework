@@ -2,6 +2,7 @@ package com.geekbrains.server.services;
 
 import com.geekbrains.gwt.common.TaskDto;
 import com.geekbrains.server.entities.*;
+import com.geekbrains.server.mappers.TaskMapper;
 import com.geekbrains.server.repositories.TaskRepository;
 import com.geekbrains.server.repositories.specifications.TaskSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +55,7 @@ public class TaskService {
     public List<TaskDto> getAllTasksDto (Long pageNumber, String title, User owner, User executer, Status status) {
         Page<Task> page = getAllTasks(pageNumber, title, owner, executer, status);
         List<Task> tasks = page.get().collect(Collectors.toList());
-        List<TaskDto> res = new ArrayList<TaskDto>();
-        for (int i = 0; i < tasks.size(); i++) {
-            res.add(tasks.get(i).toDto());
-        }
-        return res;
+        return TaskMapper.MAPPER.fromTaskList(tasks);
     }
 
     public Task getTask(Long id) {

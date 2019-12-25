@@ -58,7 +58,7 @@ public class ItemsTableWidget extends Composite {
         TextColumn<TaskDto> ownerColumn = new TextColumn<TaskDto>() {
             @Override
             public String getValue(TaskDto itemDto) {
-                return itemDto.getOwner();
+                return itemDto.getOwner().getUsername();
             }
         };
         table.addColumn(ownerColumn, "Владелец");
@@ -66,7 +66,7 @@ public class ItemsTableWidget extends Composite {
         TextColumn<TaskDto> executerColumn = new TextColumn<TaskDto>() {
             @Override
             public String getValue(TaskDto itemDto) {
-                return itemDto.getExecuter();
+                return itemDto.getExecuter().getUsername();
             }
         };
         table.addColumn(executerColumn, "Исполнитель");
@@ -74,7 +74,7 @@ public class ItemsTableWidget extends Composite {
         TextColumn<TaskDto> statusColumn = new TextColumn<TaskDto>() {
             @Override
             public String getValue(TaskDto itemDto) {
-                return itemDto.getStatus();
+                return itemDto.getStatus().getName();
             }
         };
         table.addColumn(statusColumn, "Статус");

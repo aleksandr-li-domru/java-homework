@@ -54,18 +54,30 @@ public class AddItemFormWidget extends Composite {
 
     @UiHandler("btnSubmit")
     public void submitClick(ClickEvent event) {
-        TaskDto dto = new TaskDto();
+        TaskDto taskDto = new TaskDto();
         String id = idText.getValue();
         if (id.length() > 0) {
-            dto.setId(Long.parseLong(idText.getValue()));
+            taskDto.setId(Long.parseLong(idText.getValue()));
         }
-        dto.setTitle(titleText.getValue());
-        dto.setDescription(descrText.getValue());
-        dto.setOwnerId(Long.parseLong(ownerSel.getSelectedValue()));
-        dto.setExecuterId(Long.parseLong(execSel.getSelectedValue()));
-        dto.setStatusId(Long.parseLong(statusSel.getSelectedValue()));
+        taskDto.setTitle(titleText.getValue());
+        taskDto.setDescription(descrText.getValue());
+
+        UserDto owner = new UserDto();
+        owner.setId(Long.parseLong(ownerSel.getSelectedValue()));
+        owner.setUsername(ownerSel.getSelectedItemText());
+        taskDto.setOwner(owner);
+
+        UserDto executer = new UserDto();
+        executer.setId(Long.parseLong(execSel.getSelectedValue()));
+        executer.setUsername(execSel.getSelectedItemText());
+        taskDto.setExecuter(executer);
+
+        StatusDto status = new StatusDto();
+        status.setId(Long.parseLong(statusSel.getSelectedValue()));
+        status.setName(statusSel.getSelectedItemText());
+        taskDto.setStatus(status);
         String token = Storage.getLocalStorageIfSupported().getItem("jwt");
-        client.add(token, dto, new MethodCallback<Void> () {
+        client.add(token, taskDto, new MethodCallback<Void> () {
             @Override
             public void onFailure(Method method, Throwable throwable) {
                 GWT.log(throwable.toString());
@@ -153,9 +165,9 @@ public class AddItemFormWidget extends Composite {
         idText.setValue(dto.getId().toString());
         titleText.setValue(dto.getTitle());
         descrText.setValue(dto.getDescription());
-        this.setSelectedValue(statusSel, dto.getStatusId().toString());
-        this.setSelectedValue(ownerSel, dto.getOwnerId().toString());
-        this.setSelectedValue(execSel, dto.getExecuterId().toString());
+        this.setSelectedValue(statusSel, dto.getStatus().getId().toString());
+        this.setSelectedValue(ownerSel, dto.getOwner().getId().toString());
+        this.setSelectedValue(execSel, dto.getExecuter().getId().toString());
     }
 
     public void refresh() {
